@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aquarian Answers - Tarot guidance for everyday choices">
+    <title>Aquarian Answers - Daily Reading</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main id="app" class="app-container">
+        <!-- Navigation Header -->
+        <header class="header">
+            <nav aria-label="Main navigation">
+                <a href="/" class="return-home-link" aria-label="Return to home page">Return Home</a>
+            </nav>
+        </header>
+
+        <!-- Card Display Area -->
+        <section class="card-display" aria-live="polite" aria-label="Card reading display">
+            <div class="card-container">
+                <img
+                    id="cardImage"
+                    src=""
+                    alt=""
+                    class="card-image"
+                    loading="lazy"
+                >
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="scroll-indicator" aria-hidden="true">
+                <span class="scroll-arrow">↓</span>
+            </div>
+        </section>
+
+        <!-- Interpretation Text Area -->
+        <section class="interpretation-section" aria-label="Card interpretation">
+            <div class="interpretation-container">
+                <h2 id="cardName" class="card-name"></h2>
+                <p id="cardOrientation" class="card-orientation" aria-live="polite"></p>
+                <p id="interpretationText" class="interpretation-text"></p>
+            </div>
+        </section>
+
+        <!-- Action Button -->
+        <footer class="footer">
+            <button
+                id="actionButton"
+                class="action-button"
+                aria-label="Draw a new card"
+            >
+                Draw Your Card
+            </button>
+        </footer>
+    </main>
+
+    <script src="cards.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

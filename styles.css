@@ -1,0 +1,393 @@
+/* ========================================
+   RESET & VARIABLES
+   ======================================== */
+
+:root {
+    --color-dark: #2c3e50;
+    --color-light: #ffffff;
+    --color-text: #333333;
+    --color-text-secondary: #666666;
+    --color-border: #e0e0e0;
+    --color-background: #fafafa;
+    --spacing-xs: 8px;
+    --spacing-sm: 12px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --font-size-body: 16px;
+    --font-size-sm: 14px;
+    --font-size-lg: 18px;
+    --font-size-xl: 24px;
+    --line-height-normal: 1.6;
+    --line-height-tight: 1.4;
+    --transition-default: 300ms ease-in-out;
+    --border-radius: 8px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-background: #1a1a1a;
+        --color-text: #ffffff;
+        --color-text-secondary: #cccccc;
+        --color-border: #333333;
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-normal);
+    color: var(--color-text);
+    background-color: var(--color-background);
+    overflow-x: hidden;
+}
+
+/* ========================================
+   MAIN LAYOUT
+   ======================================== */
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    gap: 0;
+}
+
+/* ========================================
+   HEADER / NAVIGATION
+   ======================================== */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--color-light);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing-md);
+}
+
+@media (prefers-color-scheme: dark) {
+    .header {
+        background-color: #252525;
+    }
+}
+
+.header nav {
+    max-width: 100%;
+}
+
+.return-home-link {
+    display: inline-block;
+    color: var(--color-dark);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius);
+    transition: background-color var(--transition-default), color var(--transition-default);
+}
+
+.return-home-link:hover,
+.return-home-link:focus {
+    background-color: var(--color-border);
+    outline: 2px solid var(--color-dark);
+    outline-offset: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .return-home-link {
+        color: var(--color-light);
+    }
+
+    .return-home-link:hover,
+    .return-home-link:focus {
+        background-color: #333333;
+    }
+}
+
+/* ========================================
+   CARD DISPLAY SECTION
+   ======================================== */
+
+.card-display {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+    min-height: 60vh;
+    background-color: var(--color-background);
+}
+
+.card-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-image {
+    width: 100%;
+    height: auto;
+    max-width: 500px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: block;
+    aspect-ratio: 1410 / 2250;
+    object-fit: cover;
+}
+
+@media (prefers-color-scheme: dark) {
+    .card-image {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* ========================================
+   SCROLL INDICATOR
+   ======================================== */
+
+.scroll-indicator {
+    margin-top: var(--spacing-lg);
+    text-align: center;
+    opacity: 0.6;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.scroll-arrow {
+    display: inline-block;
+    font-size: var(--font-size-xl);
+    color: var(--color-text-secondary);
+    animation: bounce 1.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(8px);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Hide scroll indicator when in welcome state (we'll toggle with JS) */
+.scroll-indicator.hidden {
+    display: none;
+}
+
+/* ========================================
+   INTERPRETATION SECTION
+   ======================================== */
+
+.interpretation-section {
+    padding: var(--spacing-lg) var(--spacing-md);
+    background-color: var(--color-background);
+    border-top: 1px solid var(--color-border);
+}
+
+.interpretation-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.card-name {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-dark);
+    margin-bottom: var(--spacing-sm);
+}
+
+@media (prefers-color-scheme: dark) {
+    .card-name {
+        color: var(--color-light);
+    }
+}
+
+.card-orientation {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    font-style: italic;
+    margin-bottom: var(--spacing-md);
+    text-transform: capitalize;
+}
+
+.interpretation-text {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-normal);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-lg);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Hide interpretation section in welcome state */
+.interpretation-section.hidden {
+    display: none;
+}
+
+/* ========================================
+   FOOTER / ACTION BUTTON
+   ======================================== */
+
+.footer {
+    padding: var(--spacing-lg) var(--spacing-md);
+    background-color: var(--color-light);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    justify-content: center;
+}
+
+@media (prefers-color-scheme: dark) {
+    .footer {
+        background-color: #252525;
+    }
+}
+
+.action-button {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-body);
+    font-weight: 600;
+    color: var(--color-light);
+    background-color: var(--color-dark);
+    border: 2px solid var(--color-dark);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all var(--transition-default);
+    min-width: 200px;
+    text-align: center;
+}
+
+.action-button:hover {
+    background-color: lighten(var(--color-dark), 10%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.action-button:focus {
+    outline: 2px solid var(--color-dark);
+    outline-offset: 2px;
+}
+
+.action-button:active {
+    transform: translateY(0);
+}
+
+@media (prefers-color-scheme: dark) {
+    .action-button:hover {
+        background-color: #3d5570;
+    }
+}
+
+/* ========================================
+   WELCOME STATE
+   ======================================== */
+
+.app-container.welcome-state .card-image {
+    opacity: 1;
+}
+
+.app-container.welcome-state .scroll-indicator {
+    display: none;
+}
+
+.app-container.welcome-state .interpretation-section {
+    display: none;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (min-width: 768px) {
+    .card-display {
+        min-height: 70vh;
+        padding: var(--spacing-xl);
+    }
+
+    .card-container {
+        max-width: 600px;
+    }
+
+    .card-image {
+        max-width: 600px;
+    }
+
+    .interpretation-container {
+        max-width: 700px;
+    }
+
+    .action-button {
+        min-width: 250px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .card-display {
+        min-height: 75vh;
+    }
+
+    .card-container {
+        max-width: 700px;
+    }
+
+    .card-image {
+        max-width: 700px;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-arrow,
+    .action-button {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* Focus visible for keyboard navigation */
+:focus-visible {
+    outline: 2px solid var(--color-dark);
+    outline-offset: 2px;
+}
+
+/* Screen reader only content */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
