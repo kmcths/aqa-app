@@ -391,3 +391,44 @@ body {
     white-space: nowrap;
     border-width: 0;
 }
+/* Responsive card sizing */
+.card-display {
+  flex: 0 0 auto;
+  min-height: 0;
+  padding: 20px 16px;
+}
+
+.card-container {
+  width: 100%;
+  max-width: 300px;
+  margin-inline: auto;
+}
+
+.card-image {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(460px, 52svh);
+  margin-inline: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
+.scroll-indicator {
+  margin-top: 12px;
+}
+
+@media (max-width: 600px) {
+  .card-display {
+    padding: 16px 12px;
+  }
+
+  .card-container {
+    max-width: 240px;
+  }
+
+  .card-image {
+    max-height: min(360px, 45svh);
+  }
+}
