@@ -154,6 +154,24 @@ function cardNameToFileName(name) {
         .replace(/\s+/g, '-');
 }
 
+/** Select a card from the full deck in cards.js. */
+function getRandomCard() {
+    return CARDS[Math.floor(Math.random() * CARDS.length)];
+}
+
+/** Each reading has an equal chance of upright or reversed. */
+function getRandomOrientation() {
+    return Math.random() < 0.5 ? 'Upright' : 'Reversed';
+}
+
+function getCardImage(card, orientation) {
+    return orientation === 'Reversed' ? card.imageReversed : card.imageUpright;
+}
+
+function getCardText(card, orientation) {
+    return orientation === 'Reversed' ? card.textReversed : card.textUpright;
+}
+
 // Initialize on DOM ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
