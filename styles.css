@@ -90,34 +90,6 @@ body {
     max-width: 100%;
 }
 
-.return-home-link {
-    display: inline-block;
-    color: var(--color-dark);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: var(--font-size-sm);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--border-radius);
-    transition: background-color var(--transition-default), color var(--transition-default);
-}
-
-.return-home-link:hover,
-.return-home-link:focus {
-    background-color: var(--color-border);
-    outline: 2px solid var(--color-dark);
-    outline-offset: 2px;
-}
-
-@media (prefers-color-scheme: dark) {
-    .return-home-link {
-        color: var(--color-light);
-    }
-
-    .return-home-link:hover,
-    .return-home-link:focus {
-        background-color: #333333;
-    }
-}
 
 /* ========================================
    CARD DISPLAY SECTION
