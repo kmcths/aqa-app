@@ -391,44 +391,108 @@ body {
     white-space: nowrap;
     border-width: 0;
 }
-/* Responsive card sizing */
-.card-display {
-  flex: 0 0 auto;
-  min-height: 0;
-  padding: 20px 16px;
-}
 
-.card-container {
-  width: 100%;
-  max-width: 300px;
-  margin-inline: auto;
-}
 
-.card-image {
-  display: block;
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: min(460px, 52svh);
-  margin-inline: auto;
-  aspect-ratio: auto;
-  object-fit: contain;
-}
-
+/* Reading layout: append after the original styles. */
 .scroll-indicator {
-  margin-top: 12px;
+    display: none;
 }
 
-@media (max-width: 600px) {
-  .card-display {
-    padding: 16px 12px;
-  }
+.card-display {
+    flex: none;
+    min-height: 0;
+    padding: 24px 16px 16px;
+}
 
-  .card-container {
-    max-width: 240px;
-  }
+.interpretation-section {
+    border-top: 0;
+    padding-top: 8px;
+    padding-bottom: 0;
+}
 
-  .card-image {
-    max-height: min(360px, 45svh);
-  }
+.footer {
+    border-top: 0;
+    background-color: var(--color-background);
+    padding-top: 8px;
+}
+
+/* Phones: a smaller card and less empty vertical space. */
+@media (max-width: 767px) {
+    .card-container {
+        width: min(80vw, 300px, calc(52svh * 1410 / 2250));
+    }
+}
+
+/* Tablets and smaller desktop windows retain the stacked layout. */
+@media (min-width: 768px) {
+    .card-display {
+        min-height: 0;
+        padding: 24px 16px 16px;
+    }
+}
+
+/* Wide desktops: preserve the original 700px card width. */
+@media (min-width: 1200px) {
+    .app-container {
+        display: grid;
+        grid-template-columns: minmax(24px, 1fr) 700px minmax(0, 452px) minmax(24px, 1fr);
+        grid-template-rows: auto auto 1fr;
+        align-content: start;
+        align-items: start;
+    }
+
+    .header {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        margin-bottom: 32px;
+    }
+
+    .card-display {
+        grid-column: 2;
+        grid-row: 2 / 4;
+        min-height: 0;
+        padding: 0 0 32px;
+    }
+
+    .card-container,
+    .card-image {
+        width: 700px;
+        max-width: 700px;
+    }
+
+    .interpretation-section {
+        grid-column: 3;
+        grid-row: 2;
+        min-width: 0;
+        padding: 24px 0 0 40px;
+    }
+
+    .interpretation-container {
+        max-width: none;
+        margin: 0;
+    }
+
+    .interpretation-text {
+        margin-bottom: 24px;
+    }
+
+    .footer {
+        grid-column: 3;
+        grid-row: 3;
+        justify-content: flex-start;
+        padding: 0 0 32px 40px;
+    }
+
+    /* Before drawing, keep the card back and button centered. */
+    .app-container.welcome-state .card-display {
+        grid-column: 2 / 4;
+        grid-row: 2;
+        padding-bottom: 24px;
+    }
+
+    .app-container.welcome-state .footer {
+        grid-column: 2 / 4;
+        justify-content: center;
+        padding-left: 0;
+    }
 }
