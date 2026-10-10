@@ -1,38 +1,29 @@
 /* ========================================
-   RESET & VARIABLES
+   AQUARIAN ANSWERS - DAILY READING
+   The app runs inside an iframe, so every width and
+   breakpoint below is measured against the iframe.
    ======================================== */
 
 :root {
-    --color-dark: #2c3e50;
-    --color-light: #ffffff;
-    --color-text: #333333;
-    --color-text-secondary: #666666;
-    --color-border: #e0e0e0;
-    --color-background: #fafafa;
-    --spacing-xs: 8px;
-    --spacing-sm: 12px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --spacing-xl: 32px;
-    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    --font-size-body: 16px;
-    --font-size-sm: 14px;
-    --font-size-lg: 18px;
-    --font-size-xl: 24px;
-    --line-height-normal: 1.6;
-    --line-height-tight: 1.4;
-    --transition-default: 300ms ease-in-out;
-    --border-radius: 8px;
-}
+    --color-background: #735232;   /* matches the host page section */
+    --color-text: #f6eee3;
+    --color-text-secondary: #e3d4c0;
+    --color-focus: #f6eee3;
+    --card-edge-light: #eadcc0;    /* stacked-deck edges */
+    --card-edge-dark: #b39a70;
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --color-background: #1a1a1a;
-        --color-text: #ffffff;
-        --color-text-secondary: #cccccc;
-        --color-border: #333333;
-    }
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --radius: 10px;
+    --card-ratio: 1410 / 2250;
+
+    /* Sizes */
+    --welcome-w: min(380px, 70vw, calc(72svh * 1410 / 2250));
+    --deck-w: clamp(110px, 16vw, 200px);
+    --card-w: clamp(200px, 30vw, 340px);
+    --text-w: minmax(240px, 400px);
+    --gap-deck: clamp(16px, 2.5vw, 28px);   /* deck to card */
+    --gap-text: clamp(24px, 4vw, 44px);     /* card to text */
+    --text-drop: 24px;                      /* text starts below card top */
 }
 
 * {
@@ -41,472 +32,205 @@
     box-sizing: border-box;
 }
 
-html {
+html,
+body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-family);
     font-size: 16px;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-    font-family: var(--font-family);
-    font-size: var(--font-size-body);
-    line-height: var(--line-height-normal);
-    color: var(--color-text);
-    background-color: var(--color-background);
     overflow-x: hidden;
 }
 
 /* ========================================
-   MAIN LAYOUT
+   LAYOUT
    ======================================== */
 
-.app-container {
-    display: flex;
-    flex-direction: column;
+.app {
     min-height: 100vh;
-    gap: 0;
-}
-
-/* ========================================
-   CARD DISPLAY SECTION
-   ======================================== */
-
-.card-display {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 32px 24px;
+    display: grid;
     justify-content: center;
-    padding: var(--spacing-md);
-    min-height: 60vh;
-    background-color: var(--color-background);
+    align-content: start;
 }
 
-.card-container {
-    position: relative;
-    width: 100%;
-    max-width: 500px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Reading: deck | card | text, centered as one group */
+.table {
+    display: grid;
+    grid-template-columns: var(--deck-w) var(--card-w) var(--text-w);
+    column-gap: var(--gap-deck);
+    align-items: start;
 }
 
-.card-image {
-    width: 100%;
-    height: auto;
-    max-width: 500px;
-    border-radius: var(--border-radius);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    display: block;
-    aspect-ratio: 1410 / 2250;
-    object-fit: cover;
+.interpretation {
+    padding-top: var(--text-drop);
+    padding-left: calc(var(--gap-text) - var(--gap-deck));
+    min-width: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-    .card-image {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    }
+/* Welcome: the deck alone, large and centered */
+.welcome-state .table {
+    grid-template-columns: var(--welcome-w);
 }
 
-/* ========================================
-   SCROLL INDICATOR
-   ======================================== */
-
-.scroll-indicator {
-    margin-top: var(--spacing-lg);
-    text-align: center;
-    opacity: 0.6;
-    animation: pulse 2s ease-in-out infinite;
-}
-
-.scroll-arrow {
-    display: inline-block;
-    font-size: var(--font-size-xl);
-    color: var(--color-text-secondary);
-    animation: bounce 1.5s ease-in-out infinite;
-}
-
-@keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(8px);
-    }
-}
-
-@keyframes pulse {
-    0%, 100% {
-        opacity: 0.6;
-    }
-    50% {
-        opacity: 1;
-    }
-}
-
-/* Hide scroll indicator when in welcome state (we'll toggle with JS) */
-.scroll-indicator.hidden {
+.welcome-state .card-slot,
+.welcome-state .interpretation {
     display: none;
 }
 
-/* ========================================
-   INTERPRETATION SECTION
-   ======================================== */
-
-.interpretation-section {
-    padding: var(--spacing-lg) var(--spacing-md);
-    background-color: var(--color-background);
-    border-top: 1px solid var(--color-border);
-}
-
-.interpretation-container {
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.card-name {
-    font-size: var(--font-size-lg);
-    font-weight: 600;
-    color: var(--color-dark);
-    margin-bottom: var(--spacing-sm);
-}
-
-@media (prefers-color-scheme: dark) {
-    .card-name {
-        color: var(--color-light);
-    }
-}
-
-.card-orientation {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    font-style: italic;
-    margin-bottom: var(--spacing-md);
-    text-transform: capitalize;
-}
-
-.interpretation-text {
-    font-size: var(--font-size-body);
-    line-height: var(--line-height-normal);
-    color: var(--color-text);
-    margin-bottom: var(--spacing-lg);
-    white-space: pre-wrap;
-    word-wrap: break-word;
-}
-
-/* Hide interpretation section in welcome state */
-.interpretation-section.hidden {
-    display: none;
-}
-
-/* ========================================
-   FOOTER / ACTION BUTTON
-   ======================================== */
-
-.footer {
-    padding: var(--spacing-lg) var(--spacing-md);
-    background-color: var(--color-light);
-    border-top: 1px solid var(--color-border);
-    display: flex;
-    justify-content: center;
-}
-
-@media (prefers-color-scheme: dark) {
-    .footer {
-        background-color: #252525;
-    }
-}
-
-.action-button {
-    padding: var(--spacing-md) var(--spacing-lg);
-    font-size: var(--font-size-body);
-    font-weight: 600;
-    color: var(--color-light);
-    background-color: var(--color-dark);
-    border: 2px solid var(--color-dark);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: all var(--transition-default);
-    min-width: 200px;
-    text-align: center;
-}
-
-.action-button:hover {
-    background-color: lighten(var(--color-dark), 10%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.action-button:focus {
-    outline: 2px solid var(--color-dark);
-    outline-offset: 2px;
-}
-
-.action-button:active {
-    transform: translateY(0);
-}
-
-@media (prefers-color-scheme: dark) {
-    .action-button:hover {
-        background-color: #3d5570;
-    }
-}
-
-/* ========================================
-   WELCOME STATE
-   ======================================== */
-
-.app-container.welcome-state .card-image {
-    opacity: 1;
-}
-
-.app-container.welcome-state .scroll-indicator {
-    display: none;
-}
-
-.app-container.welcome-state .interpretation-section {
-    display: none;
-}
-
-/* ========================================
-   RESPONSIVE DESIGN
-   ======================================== */
-
-@media (min-width: 768px) {
-    .card-display {
-        min-height: 70vh;
-        padding: var(--spacing-xl);
-    }
-
-    .card-container {
-        max-width: 600px;
-    }
-
-    .card-image {
-        max-width: 600px;
-    }
-
-    .interpretation-container {
-        max-width: 700px;
-    }
-
-    .action-button {
-        min-width: 250px;
-    }
-}
-
-@media (min-width: 1024px) {
-    .card-display {
-        min-height: 75vh;
-    }
-
-    .card-container {
-        max-width: 700px;
-    }
-
-    .card-image {
-        max-width: 700px;
-    }
-}
-
-/* ========================================
-   ACCESSIBILITY
-   ======================================== */
-
-@media (prefers-reduced-motion: reduce) {
-    .scroll-arrow,
-    .action-button {
-        animation: none;
-        transition: none;
-    }
-}
-
-/* Focus visible for keyboard navigation */
-:focus-visible {
-    outline: 2px solid var(--color-dark);
-    outline-offset: 2px;
-}
-
-/* Screen reader only content */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-
-/* ========================================
-   READING LAYOUT
-   Replaces all earlier appended layout patches.
-   Card and interpretation form one section: no arrow, no dividers.
-   NOTE: the app runs inside an iframe, so these breakpoints measure
-   the iframe width, not the browser window.
-   ======================================== */
-
-.scroll-indicator {
-    display: none;
-}
-
-.card-display {
-    flex: none;
-    min-height: 0;
-    padding: 24px 16px 16px;
-}
-
-.card-container {
-    width: min(100%, 380px);
-    max-width: 380px;
-}
-
-.card-image {
-    width: 100%;
-    max-width: 380px;
-}
-
-.interpretation-section {
-    border-top: 0;
-    padding-top: 8px;
-    padding-bottom: 0;
-}
-
-.footer {
-    border-top: 0;
-    background-color: var(--color-background);
-    padding-top: 8px;
-}
-
-/* Narrow frames (phones): stacked, smaller card */
+/* Narrow frames: deck and card side by side, text below */
 @media (max-width: 699px) {
-    .card-container {
-        width: min(80vw, 300px, calc(52svh * 1410 / 2250));
-    }
-}
-
-/* Two columns: card left, interpretation and button right,
-   whole group centered in the frame */
-@media (min-width: 700px) {
-    .app-container {
-        --card-w: clamp(260px, 38vw, 380px);
-        --col-gap: 40px;          /* space between card and text */
-        --text-drop: 24px;        /* text starts this far below card top */
-        display: grid;
-        grid-template-columns:
-            minmax(24px, 1fr)
-            var(--card-w)
-            minmax(0, 420px)
-            minmax(24px, 1fr);
-        grid-template-rows: auto 1fr;
-        padding-top: 32px;
-        align-content: start;
-        align-items: start;
+    :root {
+        --deck-w: 30vw;
+        --card-w: 52vw;
+        --gap-deck: 4vw;
     }
 
-    .card-display {
-        grid-column: 2;
-        grid-row: 1 / 3;
-        padding: 0 0 32px;
+    .app {
+        padding: 20px 16px;
     }
 
-    .card-container,
-    .card-image {
-        width: var(--card-w);
-        max-width: var(--card-w);
+    .table {
+        grid-template-columns: var(--deck-w) var(--card-w);
     }
 
-    .interpretation-section {
-        grid-column: 3;
-        grid-row: 1;
-        min-width: 0;
-        padding: var(--text-drop) 0 0 var(--col-gap);
-    }
-
-    .interpretation-container {
-        max-width: none;
-        margin: 0;
-    }
-
-    .interpretation-text {
-        margin-bottom: 24px;
-    }
-
-    .footer {
-        grid-column: 3;
-        grid-row: 2;
-        justify-content: flex-start;
-        padding: 0 0 32px var(--col-gap);
-    }
-
-    /* Before the first draw: card back and button centered */
-    .app-container.welcome-state .card-display {
-        grid-column: 2 / 4;
-        grid-row: 1;
-        padding-bottom: 24px;
-    }
-
-    .app-container.welcome-state .footer {
-        grid-column: 2 / 4;
-        grid-row: 2;
-        justify-content: center;
+    .interpretation {
+        grid-column: 1 / -1;
         padding-left: 0;
     }
 }
 
 /* ========================================
-   THEME AND CARD-BACK BUTTON
+   DECK (the draw control)
    ======================================== */
 
-/* Background matches the host page section (#735232).
-   Text is lightened so it stays readable on the brown. */
-:root {
-    --color-background: #735232;
-    --color-text: #f6eee3;
-    --color-text-secondary: #e3d4c0;
-    --color-focus: #f6eee3;
-}
-
-.card-name {
-    color: var(--color-text);
-}
-
-:focus-visible {
-    outline-color: var(--color-focus);
-}
-
-.action-button {
-    border-color: var(--color-text);
-}
-
-/* Welcome screen: the card back is the button */
-.app-container.welcome-state .card-container {
+.deck {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
     cursor: pointer;
-    border-radius: var(--border-radius);
+    border-radius: var(--radius);
+    transform-origin: top left;
 }
 
-.app-container.welcome-state .card-image {
-    transition: transform var(--transition-default), box-shadow var(--transition-default);
+.deck-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: var(--card-ratio);
+    object-fit: cover;
+    border-radius: var(--radius);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    transition: transform 250ms ease, box-shadow 250ms ease;
 }
 
-.app-container.welcome-state .card-container:hover .card-image {
+/* After the first draw it reads as a stack of cards */
+.reading-state .deck-image {
+    box-shadow:
+        1px 1px 0 var(--card-edge-light),
+        2px 2px 0 var(--card-edge-dark),
+        3px 3px 0 var(--card-edge-light),
+        4px 4px 0 var(--card-edge-dark),
+        5px 5px 0 var(--card-edge-light),
+        0 10px 20px rgba(0, 0, 0, 0.35);
+}
+
+.deck:hover .deck-image {
     transform: translateY(-4px);
+}
+
+.deck[aria-disabled="true"] {
+    cursor: progress;
+}
+
+.deck[aria-disabled="true"] .deck-image {
+    transform: none;
+}
+
+.deck:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 5px;
+}
+
+/* ========================================
+   DRAWN CARD (two faces, flips on Y axis)
+   ======================================== */
+
+.flip-card {
+    width: 100%;
+    aspect-ratio: var(--card-ratio);
+    perspective: 1400px;
+    transform-origin: top left;
+}
+
+.flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: rotateY(180deg);    /* resting state: face up */
+}
+
+.face {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
 }
 
-.app-container.welcome-state .card-container:focus-visible {
-    outline: 3px solid var(--color-focus);
-    outline-offset: 4px;
+.face-front {
+    transform: rotateY(180deg);
 }
 
-.app-container.welcome-state .footer {
-    display: none;
+/* ========================================
+   READING TEXT
+   ======================================== */
+
+.card-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 8px;
+}
+
+.card-orientation {
+    font-size: 0.875rem;
+    font-style: italic;
+    color: var(--color-text-secondary);
+    margin-bottom: 16px;
+}
+
+.interpretation-text {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+/* ========================================
+   UTILITIES
+   ======================================== */
+
+.is-hidden {
+    opacity: 0;
+    visibility: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .app-container.welcome-state .card-image {
+    .deck-image {
         transition: none;
+    }
+
+    .deck:hover .deck-image {
+        transform: none;
     }
 }

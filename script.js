@@ -1,183 +1,168 @@
 /**
  * Aquarian Answers - Daily Reading
- * State management and interaction logic
+ *
+ * The deck is the only control. Each click deals the top card:
+ * it travels from the deck to the card slot while flipping face up,
+ * then the reading fades in beside it.
+ *
+ * First draw: the deck also slides from the center to its place on the left.
+ * Later draws: the current card and reading clear first.
  */
 
-// DOM Elements
+// Card back used on the card while it is being dealt.
+// If you make a plain back without "Draw Your Card" on it, point this at it.
+const DEALING_CARD_BACK = 'assets/cards/back.png';
+
+// Timing (ms)
+const DECK_SLIDE_MS = 550;
+const DEAL_MS = 850;
+const CLEAR_MS = 300;
+const TEXT_IN_MS = 400;
+
+// DOM
 const app = document.getElementById('app');
-const actionButton = document.getElementById('actionButton');
+const deck = document.getElementById('deck');
+const flipCard = document.getElementById('flipCard');
+const flipInner = document.getElementById('flipInner');
 const cardImage = document.getElementById('cardImage');
+const interpretation = document.getElementById('interpretation');
 const cardName = document.getElementById('cardName');
 const cardOrientation = document.getElementById('cardOrientation');
 const interpretationText = document.getElementById('interpretationText');
-const interpretationSection = document.querySelector('.interpretation-section');
-const scrollIndicator = document.querySelector('.scroll-indicator');
-const cardContainer = document.getElementById('cardContainer');
 
-// State
-let currentState = 'welcome'; // 'welcome' or 'reading'
-let currentCard = null;
-let currentOrientation = null;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-/**
- * Initialize the app
- */
+let hasDrawn = false;
+let busy = false;
+
 function init() {
-    setupEventListeners();
-    displayWelcomeState();
+    flipCard.querySelector('.face-back').src = DEALING_CARD_BACK;
+    deck.addEventListener('click', handleDraw);
 }
 
-/**
- * Setup event listeners
- */
-function setupEventListeners() {
-    actionButton.addEventListener('click', handleActionButtonClick);
+async function handleDraw() {
+    if (busy) return;
+    busy = true;
+    deck.setAttribute('aria-disabled', 'true');
 
-    // The card back acts as the button on the welcome screen
-    cardContainer.addEventListener('click', handleCardBackActivate);
-    cardContainer.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            handleCardBackActivate();
+    const card = getRandomCard();
+    const orientation = getRandomOrientation();
+    const imagePath = getCardImage(card, orientation);
+    const imageReady = loadImage(imagePath); // start loading right away
+
+    try {
+        if (!hasDrawn) {
+            await moveDeckToSide();
+            hasDrawn = true;
+        } else {
+            await clearCurrentCard();
         }
-    });
-}
 
-/**
- * Clicking the card back draws a card, but only on the welcome screen.
- * A drawn card face is not clickable.
- */
-function handleCardBackActivate() {
-    if (currentState === 'welcome') {
-        drawNewCard();
+        await imageReady;
+        cardImage.src = imagePath;
+        cardImage.alt = `${card.name}, ${orientation}`;
+        cardName.textContent = card.name;
+        cardOrientation.textContent = orientation;
+        interpretationText.textContent = getCardText(card, orientation);
+
+        await dealCard();
+        await showReading();
+    } finally {
+        busy = false;
+        deck.removeAttribute('aria-disabled');
+        deck.setAttribute('aria-label', 'Draw another card');
     }
 }
 
-/**
- * Handle action button click
- * In welcome state: transition to reading state
- * In reading state: draw a new card
- */
-function handleActionButtonClick(e) {
-    e.preventDefault();
-
-    if (currentState === 'welcome') {
-        drawNewCard();
-    } else if (currentState === 'reading') {
-        drawNewCard();
-    }
-}
-
-/**
- * Display welcome state
- */
-function displayWelcomeState() {
-    currentState = 'welcome';
-
-    // Update app state class
-    app.classList.add('welcome-state');
-
-    // Update card image (show back.png or welcome.png)
-    cardImage.src = 'assets/cards/back.png';
-    cardImage.alt = 'Card back';
-
-    // Make the card back behave as a button
-    cardContainer.setAttribute('role', 'button');
-    cardContainer.setAttribute('tabindex', '0');
-    cardContainer.setAttribute('aria-label', 'Draw your card');
-
-    // Update button
-    actionButton.textContent = 'Draw Your Card';
-    actionButton.setAttribute('aria-label', 'Draw your first card');
-
-    // Hide interpretation elements
-    interpretationSection.classList.add('hidden');
-    scrollIndicator.classList.add('hidden');
-
-    // Reset current card state
-    currentCard = null;
-    currentOrientation = null;
-}
-
-/**
- * Draw a new card
- */
-function drawNewCard() {
-    // Get random card and orientation
-    currentCard = getRandomCard();
-    currentOrientation = getRandomOrientation();
-
-    // Update state
-    currentState = 'reading';
+/** First draw: slide the deck from center stage to its spot on the left. */
+async function moveDeckToSide() {
+    const first = deck.getBoundingClientRect();
     app.classList.remove('welcome-state');
+    app.classList.add('reading-state');
+    const last = deck.getBoundingClientRect();
 
-    // The drawn card face is not a button
-    cardContainer.removeAttribute('role');
-    cardContainer.removeAttribute('tabindex');
-    cardContainer.removeAttribute('aria-label');
-
-    // Get image and text
-    const imagePath = getCardImage(currentCard, currentOrientation);
-    const text = getCardText(currentCard, currentOrientation);
-
-    // Update card image
-    cardImage.src = imagePath;
-
-    // Create alt text for accessibility
-    const altText = `${currentCard.name} card, ${currentOrientation} orientation. ${text}`;
-    cardImage.alt = altText;
-
-    // Update interpretation display
-    updateInterpretationDisplay();
-
-    // Show interpretation elements
-    interpretationSection.classList.remove('hidden');
-    scrollIndicator.classList.remove('hidden');
-
-    // Update button
-    actionButton.textContent = 'Draw a New Card';
-    actionButton.setAttribute('aria-label', `Draw another card. Current card: ${currentCard.name}, ${currentOrientation}`);
-
-    // Scroll to top to show the card
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    await animate(deck, [
+        { transform: fromTo(first, last) },
+        { transform: 'none' }
+    ], { duration: DECK_SLIDE_MS, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' });
 }
 
-/**
- * Update the interpretation display section
- */
-function updateInterpretationDisplay() {
-    if (!currentCard || !currentOrientation) {
-        return;
-    }
-
-    const text = getCardText(currentCard, currentOrientation);
-
-    // Update elements
-    cardName.textContent = currentCard.name;
-    cardOrientation.textContent = `${currentOrientation}`;
-    interpretationText.textContent = text;
-
-    // Update aria-live region for screen readers
-    interpretationSection.setAttribute('aria-live', 'polite');
+/** Later draws: the current card slides away and the text fades. */
+async function clearCurrentCard() {
+    await Promise.all([
+        animate(interpretation, [{ opacity: 1 }, { opacity: 0 }],
+            { duration: CLEAR_MS, easing: 'ease-in' }),
+        animate(flipCard, [
+            { opacity: 1, transform: 'none' },
+            { opacity: 0, transform: 'translateX(32px)' }
+        ], { duration: CLEAR_MS, easing: 'ease-in' })
+    ]);
+    interpretation.classList.add('is-hidden');
+    flipCard.classList.add('is-hidden');
 }
 
-/**
- * Utility: Parse card name to file-friendly format
- * e.g., "The Sun" -> "sun"
- */
-function cardNameToFileName(name) {
-    return name
-        .toLowerCase()
-        .replace(/^the\s+/, '')
-        .replace(/\s+/g, '-');
+/** Lift the top card off the deck, carry it to the slot and flip it face up. */
+async function dealCard() {
+    flipCard.classList.remove('is-hidden');
+    const from = deck.getBoundingClientRect();
+    const to = flipCard.getBoundingClientRect();
+
+    const dx = from.left - to.left;
+    const dy = from.top - to.top;
+    const s = from.width / to.width;
+    const midScale = (s + 1) / 2;
+
+    const timing = { duration: DEAL_MS, easing: 'cubic-bezier(0.3, 0.6, 0.2, 1)', fill: 'backwards' };
+
+    await Promise.all([
+        animate(flipCard, [
+            { transform: `translate(${dx}px, ${dy}px) scale(${s})` },
+            { transform: `translate(${dx / 2}px, ${dy / 2 - 28}px) scale(${midScale})`, offset: 0.5 },
+            { transform: 'none' }
+        ], timing),
+        animate(flipInner, [
+            { transform: 'rotateY(0deg)' },
+            { transform: 'rotateY(180deg)' }
+        ], timing)
+    ]);
 }
 
-/** Select a card from the full deck in cards.js. */
+/** Fade the reading in beside the card. */
+async function showReading() {
+    interpretation.classList.remove('is-hidden');
+    await animate(interpretation, [
+        { opacity: 0, transform: 'translateY(8px)' },
+        { opacity: 1, transform: 'none' }
+    ], { duration: TEXT_IN_MS, easing: 'ease-out', fill: 'backwards' });
+}
+
+/* ---------- helpers ---------- */
+
+/** Run a Web Animation and wait for it; skipped when reduced motion is on. */
+function animate(el, keyframes, options) {
+    if (reduceMotion.matches || !el.animate) return Promise.resolve();
+    return el.animate(keyframes, options).finished.catch(() => {});
+}
+
+/** Transform that places an element at `last` back where `first` was. */
+function fromTo(first, last) {
+    const dx = first.left - last.left;
+    const dy = first.top - last.top;
+    const s = first.width / last.width;
+    return `translate(${dx}px, ${dy}px) scale(${s})`;
+}
+
+/** Resolve once the image is downloaded and decoded (never rejects). */
+function loadImage(src) {
+    const img = new Image();
+    img.src = src;
+    return (img.decode ? img.decode() : Promise.resolve()).catch(() => {});
+}
+
 function getRandomCard() {
     return CARDS[Math.floor(Math.random() * CARDS.length)];
 }
 
-/** Each reading has an equal chance of upright or reversed. */
 function getRandomOrientation() {
     return Math.random() < 0.5 ? 'Upright' : 'Reversed';
 }
@@ -190,7 +175,6 @@ function getCardText(card, orientation) {
     return orientation === 'Reversed' ? card.textReversed : card.textUpright;
 }
 
-// Initialize on DOM ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {
