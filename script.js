@@ -12,6 +12,7 @@ const cardOrientation = document.getElementById('cardOrientation');
 const interpretationText = document.getElementById('interpretationText');
 const interpretationSection = document.querySelector('.interpretation-section');
 const scrollIndicator = document.querySelector('.scroll-indicator');
+const cardContainer = document.getElementById('cardContainer');
 
 // State
 let currentState = 'welcome'; // 'welcome' or 'reading'
@@ -31,6 +32,25 @@ function init() {
  */
 function setupEventListeners() {
     actionButton.addEventListener('click', handleActionButtonClick);
+
+    // The card back acts as the button on the welcome screen
+    cardContainer.addEventListener('click', handleCardBackActivate);
+    cardContainer.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleCardBackActivate();
+        }
+    });
+}
+
+/**
+ * Clicking the card back draws a card, but only on the welcome screen.
+ * A drawn card face is not clickable.
+ */
+function handleCardBackActivate() {
+    if (currentState === 'welcome') {
+        drawNewCard();
+    }
 }
 
 /**
@@ -59,7 +79,12 @@ function displayWelcomeState() {
 
     // Update card image (show back.png or welcome.png)
     cardImage.src = 'assets/cards/back.png';
-    cardImage.alt = 'Welcome card. Click Draw Your Card to begin your reading.';
+    cardImage.alt = 'Card back';
+
+    // Make the card back behave as a button
+    cardContainer.setAttribute('role', 'button');
+    cardContainer.setAttribute('tabindex', '0');
+    cardContainer.setAttribute('aria-label', 'Draw your card');
 
     // Update button
     actionButton.textContent = 'Draw Your Card';
@@ -85,6 +110,11 @@ function drawNewCard() {
     // Update state
     currentState = 'reading';
     app.classList.remove('welcome-state');
+
+    // The drawn card face is not a button
+    cardContainer.removeAttribute('role');
+    cardContainer.removeAttribute('tabindex');
+    cardContainer.removeAttribute('aria-label');
 
     // Get image and text
     const imagePath = getCardImage(currentCard, currentOrientation);

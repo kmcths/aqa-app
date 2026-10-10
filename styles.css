@@ -455,3 +455,58 @@ body {
         padding-left: 0;
     }
 }
+
+/* ========================================
+   THEME AND CARD-BACK BUTTON
+   ======================================== */
+
+/* Background matches the host page section (#735232).
+   Text is lightened so it stays readable on the brown. */
+:root {
+    --color-background: #735232;
+    --color-text: #f6eee3;
+    --color-text-secondary: #e3d4c0;
+    --color-focus: #f6eee3;
+}
+
+.card-name {
+    color: var(--color-text);
+}
+
+:focus-visible {
+    outline-color: var(--color-focus);
+}
+
+.action-button {
+    border-color: var(--color-text);
+}
+
+/* Welcome screen: the card back is the button */
+.app-container.welcome-state .card-container {
+    cursor: pointer;
+    border-radius: var(--border-radius);
+}
+
+.app-container.welcome-state .card-image {
+    transition: transform var(--transition-default), box-shadow var(--transition-default);
+}
+
+.app-container.welcome-state .card-container:hover .card-image {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.app-container.welcome-state .card-container:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 4px;
+}
+
+.app-container.welcome-state .footer {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-container.welcome-state .card-image {
+        transition: none;
+    }
+}
