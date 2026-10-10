@@ -12,7 +12,6 @@ const cardOrientation = document.getElementById('cardOrientation');
 const interpretationText = document.getElementById('interpretationText');
 const interpretationSection = document.querySelector('.interpretation-section');
 const scrollIndicator = document.querySelector('.scroll-indicator');
-const returnHomeLink = document.querySelector('.return-home-link');
 
 // State
 let currentState = 'welcome'; // 'welcome' or 'reading'
@@ -32,7 +31,6 @@ function init() {
  */
 function setupEventListeners() {
     actionButton.addEventListener('click', handleActionButtonClick);
-    returnHomeLink.addEventListener('click', handleReturnHome);
 }
 
 /**
@@ -48,16 +46,6 @@ function handleActionButtonClick(e) {
     } else if (currentState === 'reading') {
         drawNewCard();
     }
-}
-
-/**
- * Handle return home link
- */
-function handleReturnHome(e) {
-    e.preventDefault();
-    displayWelcomeState();
-    // Scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 /**
