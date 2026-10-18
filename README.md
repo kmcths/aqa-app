@@ -24,7 +24,7 @@ Direct, psychologically grounded, practical and kind. Accessible to skeptics. No
 | `script.js` | Draw logic and animations; respects reduced-motion settings |
 | `styles.css` | Layout, colors, sizing |
 | `cards.js` | All 78 cards: name, image paths, upright and reversed text |
-| `assets/cards/` | Card art: one upright and one reversed image per card, plus `back.png` |
+| `assets/cards/` | Card art (WebP): one upright and one reversed image per card, plus `back.webp`. Small versions in `thumbs/` |
 
 ## Card data
 
@@ -34,25 +34,24 @@ Each card in `cards.js` looks like this:
 {
   id: 1,
   name: "The Fool",
-  imageUpright: "assets/cards/fool.png",
-  imageReversed: "assets/cards/fool-reversed.png",
+  imageUpright: "assets/cards/fool.webp",
+  imageReversed: "assets/cards/fool-reversed.webp",
   textUpright: "...",
   textReversed: "..."
 }
 ```
 
-To change a reading, edit its text here. To swap art, replace the PNG with one of the same filename, or change the path.
+To change a reading, edit its text here. To swap art, replace the image with a WebP of the same filename (606 × 953 px), and regenerate its thumbnail (180 px wide).
 
 ## Terminology
 
 - **Reversed**: the card drawn upside down. It has its own text. In the current build it also has its own image file rather than the upright image rotated in code.
-- **Card back**: `back.png`, used for the deck and for the card while it is being dealt.
+- **Card back**: `back.webp`, used for the deck and for the card while it is being dealt.
 
 ## Current state
 
 - Text is written for cards 1 to 36: the Major Arcana and Wands.
 - Cups, Swords and Pentacles (cards 37 to 78) show a placeholder: "I'm sorry. I can't come to the reading right now. Please try a new card."
-- `assets/cards/clean-back.png` is not used anywhere.
 
 ## Open items
 

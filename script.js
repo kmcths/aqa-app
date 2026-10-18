@@ -10,7 +10,7 @@
  */
 
 // Card back used on the card while it is being dealt.
-const DEALING_CARD_BACK = 'assets/cards/back.png';
+const DEALING_CARD_BACK = 'assets/cards/back.webp';
 
 // Timing (ms)
 const DECK_SLIDE_MS = 550;
