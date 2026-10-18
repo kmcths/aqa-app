@@ -11,6 +11,10 @@
     <main id="app" class="app welcome-state">
         <div class="table">
 
+            <!-- Welcome prompt: shown until the first draw -->
+            <p id="askPrompt" class="ask-prompt" aria-hidden="true">Ask the Cards</p>
+            <img id="askHand" src="assets/hand.png" alt="" class="ask-hand" aria-hidden="true">
+
             <!-- The deck: always the control that draws a card -->
             <button id="deck" class="deck" type="button" aria-label="Ask the Cards">
                 <img src="assets/cards/back.png" alt="" class="deck-image">

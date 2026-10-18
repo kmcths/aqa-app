@@ -5,7 +5,7 @@
    ======================================== */
 
 :root {
-    --color-background: #735232;   /* matches the host page section */
+    --color-background: #0E98A2;   /* matches the host page section */
     --color-text: #f6eee3;
     --color-text-secondary: #e3d4c0;
     --color-focus: #f6eee3;
@@ -14,10 +14,10 @@
 
     --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     --radius: 10px;
-    --card-ratio: 1410 / 2250;
+    --card-ratio: 606 / 953;        /* card image size */
 
     /* Sizes */
-    --welcome-w: min(380px, 70vw, calc(72svh * 1410 / 2250));
+    --welcome-w: min(340px, 56vw, calc(64svh * 606 / 953));
     --deck-w: clamp(110px, 16vw, 200px);
     --card-w: clamp(200px, 30vw, 340px);
     --text-w: minmax(240px, 400px);
@@ -81,6 +81,69 @@ body {
 .welcome-state .card-slot,
 .welcome-state .interpretation {
     display: none;
+}
+
+/* ========================================
+   WELCOME PROMPT ("Ask the Cards" + hand)
+   ======================================== */
+
+.ask-prompt,
+.ask-hand {
+    display: none;
+}
+
+.welcome-state .table {
+    position: relative;
+}
+
+.welcome-state .ask-prompt {
+    display: block;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: clamp(1.375rem, 2.6vw, 1.75rem);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* The hand reaches in from the lower left, fingertips tucked under the deck */
+.welcome-state .ask-hand {
+    display: block;
+    position: absolute;
+    z-index: 0;
+    width: calc(var(--welcome-w) * 1.35);
+    right: calc(100% - var(--welcome-w) * 0.12);
+    bottom: calc(var(--welcome-w) * 0.02);
+    cursor: pointer;
+    /* the arm fades into the background instead of ending in a hard edge */
+    -webkit-mask-image: radial-gradient(ellipse 80% 115% at 82% 22%, #000 55%, transparent 100%);
+            mask-image: radial-gradient(ellipse 80% 115% at 82% 22%, #000 55%, transparent 100%);
+    animation: hand-reach 3.2s ease-in-out infinite;
+}
+
+.welcome-state .deck {
+    position: relative;
+    z-index: 1;
+}
+
+/* Narrow frames: no room beside the deck, so the hand reaches up from below it */
+@media (max-width: 699px) {
+    .welcome-state .table {
+        padding-bottom: calc(var(--welcome-w) * 0.42);
+    }
+
+    .welcome-state .ask-hand {
+        width: calc(var(--welcome-w) * 1.05);
+        right: auto;
+        left: calc(var(--welcome-w) * -0.62);
+        bottom: 0;
+    }
+}
+
+@keyframes hand-reach {
+    0%, 100% { transform: translate(0, 0); }
+    50%      { transform: translate(6px, -4px); }
 }
 
 /* Narrow frames: deck and card side by side, text below */
@@ -232,5 +295,9 @@ body {
 
     .deck:hover .deck-image {
         transform: none;
+    }
+
+    .ask-hand {
+        animation: none !important;
     }
 }

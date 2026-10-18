@@ -16,6 +16,7 @@ const DEALING_CARD_BACK = 'assets/cards/back.png';
 const DECK_SLIDE_MS = 550;
 const DEAL_MS = 850;
 const CLEAR_MS = 300;
+const PROMPT_OUT_MS = 250;
 const TEXT_IN_MS = 400;
 
 // DOM
@@ -28,6 +29,8 @@ const interpretation = document.getElementById('interpretation');
 const cardName = document.getElementById('cardName');
 const cardOrientation = document.getElementById('cardOrientation');
 const interpretationText = document.getElementById('interpretationText');
+const askPrompt = document.getElementById('askPrompt');
+const askHand = document.getElementById('askHand');
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -37,6 +40,9 @@ let busy = false;
 function init() {
     flipCard.querySelector('.face-back').src = DEALING_CARD_BACK;
     deck.addEventListener('click', handleDraw);
+    // The prompt and hand are part of the invitation, so tapping them draws too
+    askPrompt.addEventListener('click', handleDraw);
+    askHand.addEventListener('click', handleDraw);
 }
 
 async function handleDraw() {
@@ -75,6 +81,11 @@ async function handleDraw() {
 
 /** First draw: slide the deck from center stage to its spot on the left. */
 async function moveDeckToSide() {
+    // The welcome prompt fades away first; it is not shown again
+    await Promise.all([askPrompt, askHand].map(el =>
+        animate(el, [{ opacity: 1 }, { opacity: 0 }],
+            { duration: PROMPT_OUT_MS, easing: 'ease-in', fill: 'forwards' })));
+
     const first = deck.getBoundingClientRect();
     app.classList.remove('welcome-state');
     app.classList.add('reading-state');
