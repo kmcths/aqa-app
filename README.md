@@ -1,4 +1,4 @@
-# Aquarian Answers: Daily Reading
+# Aquarian Answers: Daily Reading and Tarot Deck
 
 A one-card daily tarot reading for Adrienne Moore's Aquarian Answers practice. Adrienne owns the voice and all card text. Ben builds the app.
 
@@ -23,8 +23,9 @@ Direct, psychologically grounded, practical and kind. Accessible to skeptics. No
 | `index.html` | Page structure: deck, card slot, reading |
 | `script.js` | Draw logic and animations; respects reduced-motion settings |
 | `styles.css` | Layout, colors, sizing |
+| `deck.html`, `deck.js`, `deck.css` | The Tarot Deck page: browse by group, open any card to read both meanings. Links like `deck.html#cups/queen-of-cups` open a card directly |
 | `cards.js` | All 78 cards: name, image paths, upright and reversed text |
-| `assets/cards/` | Card art (WebP): one upright and one reversed image per card, plus `back.webp`. Small versions in `thumbs/` |
+| `assets/cards/` | Card art (WebP): one image per card, plus `back.webp`. Small versions in `thumbs/` |
 
 ## Card data
 
@@ -34,8 +35,7 @@ Each card in `cards.js` looks like this:
 {
   id: 1,
   name: "The Fool",
-  imageUpright: "assets/cards/fool.webp",
-  imageReversed: "assets/cards/fool-reversed.webp",
+  image: "assets/cards/fool.webp",
   textUpright: "...",
   textReversed: "..."
 }
@@ -45,7 +45,7 @@ To change a reading, edit its text here. To swap art, replace the image with a W
 
 ## Terminology
 
-- **Reversed**: the card drawn upside down. It has its own text. In the current build it also has its own image file rather than the upright image rotated in code.
+- **Reversed**: the card drawn upside down. It has its own text. The image is the same card art rotated 180° in code, so there is one image file per card.
 - **Card back**: `back.webp`, used for the deck and for the card while it is being dealt.
 
 ## Current state

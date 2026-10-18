@@ -53,7 +53,7 @@ async function handleDraw() {
 
     const card = getRandomCard();
     const orientation = getRandomOrientation();
-    const imagePath = getCardImage(card, orientation);
+    const imagePath = card.image;
     const imageReady = loadImage(imagePath); // start loading right away
 
     try {
@@ -66,6 +66,7 @@ async function handleDraw() {
 
         await imageReady;
         cardImage.src = imagePath;
+        cardImage.classList.toggle('is-reversed', orientation === 'Reversed');
         cardImage.alt = `${card.name}, ${orientation}`;
         cardName.textContent = card.name;
         cardOrientation.textContent = orientation;
@@ -180,10 +181,6 @@ function getRandomCard() {
 
 function getRandomOrientation() {
     return Math.random() < 0.5 ? 'Upright' : 'Reversed';
-}
-
-function getCardImage(card, orientation) {
-    return orientation === 'Reversed' ? card.imageReversed : card.imageUpright;
 }
 
 function getCardText(card, orientation) {

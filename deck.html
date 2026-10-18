@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aquarian Answers - the meaning of every card in the deck">
+    <title>The Tarot Deck</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="deck.css">
+</head>
+<body>
+    <main class="deck-page">
+
+        <h1 class="deck-title">The Tarot Deck</h1>
+
+        <!-- The five groups -->
+        <nav class="group-tabs" role="tablist" aria-label="Card groups" id="groupTabs"></nav>
+
+        <!-- Cards in the selected group -->
+        <ul class="card-grid" id="cardGrid" role="tabpanel"></ul>
+
+    </main>
+
+    <!-- One card, brought forward -->
+    <dialog class="card-detail" id="cardDetail" aria-labelledby="detailName">
+        <div class="detail-bar">
+            <button type="button" class="detail-back" id="detailBack">
+                <span aria-hidden="true">&larr;</span> <span id="detailBackLabel">Back</span>
+            </button>
+            <div class="detail-step">
+                <button type="button" class="detail-arrow" id="detailPrev" aria-label="Previous card">&lsaquo;</button>
+                <button type="button" class="detail-arrow" id="detailNext" aria-label="Next card">&rsaquo;</button>
+            </div>
+        </div>
+
+        <div class="detail-body">
+            <img id="detailImage" class="detail-image" src="" alt="">
+
+            <div class="detail-text">
+                <h2 id="detailName" class="detail-name"></h2>
+
+                <section class="meaning">
+                    <h3 class="meaning-heading">Upright</h3>
+                    <p id="detailUpright" class="meaning-text"></p>
+                </section>
+
+                <section class="meaning">
+                    <h3 class="meaning-heading">
+                        <img id="detailReversedThumb" class="meaning-thumb" src="" alt="">
+                        Reversed
+                    </h3>
+                    <p id="detailReversed" class="meaning-text"></p>
+                </section>
+            </div>
+        </div>
+    </dialog>
+
+    <script src="cards.js"></script>
+    <script src="deck.js"></script>
+</body>
+</html>

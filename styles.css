@@ -271,6 +271,11 @@ body {
     transform: rotateY(180deg);
 }
 
+/* Reversed: the same card art, turned upside down */
+.face-front.is-reversed {
+    transform: rotateY(180deg) rotate(180deg);
+}
+
 /* ========================================
    READING TEXT
    ======================================== */
