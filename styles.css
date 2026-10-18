@@ -204,6 +204,21 @@ body {
         0 10px 20px rgba(0, 0, 0, 0.35);
 }
 
+/* "Ask Again" under the deck once a card is showing */
+.deck-label {
+    display: none;
+}
+
+.reading-state .deck-label {
+    display: block;
+    margin-top: 14px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--color-text);
+}
+
 .deck:hover .deck-image {
     transform: translateY(-4px);
 }
@@ -293,7 +308,22 @@ body {
         transition: none;
     }
 
-    .deck:hover .deck-image {
+    /* "Ask Again" under the deck once a card is showing */
+.deck-label {
+    display: none;
+}
+
+.reading-state .deck-label {
+    display: block;
+    margin-top: 14px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--color-text);
+}
+
+.deck:hover .deck-image {
         transform: none;
     }
 

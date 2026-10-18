@@ -31,6 +31,7 @@ const cardOrientation = document.getElementById('cardOrientation');
 const interpretationText = document.getElementById('interpretationText');
 const askPrompt = document.getElementById('askPrompt');
 const askHand = document.getElementById('askHand');
+const deckLabel = document.getElementById('deckLabel');
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -75,7 +76,7 @@ async function handleDraw() {
     } finally {
         busy = false;
         deck.removeAttribute('aria-disabled');
-        deck.setAttribute('aria-label', 'Draw another card');
+        deck.setAttribute('aria-label', 'Ask again');
     }
 }
 
@@ -91,10 +92,14 @@ async function moveDeckToSide() {
     app.classList.add('reading-state');
     const last = deck.getBoundingClientRect();
 
+    // "Ask Again" waits until the deck has settled, then fades in
+    deckLabel.style.opacity = '0';
     await animate(deck, [
         { transform: fromTo(first, last) },
         { transform: 'none' }
     ], { duration: DECK_SLIDE_MS, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' });
+    deckLabel.style.opacity = '';
+    animate(deckLabel, [{ opacity: 0 }, { opacity: 1 }], { duration: TEXT_IN_MS, easing: 'ease-out' });
 }
 
 /** Later draws: the current card slides away and the text fades. */
