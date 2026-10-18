@@ -10,8 +10,7 @@
  */
 
 // Card back used on the card while it is being dealt.
-// If you make a plain back without "Draw Your Card" on it, point this at it.
-const DEALING_CARD_BACK = 'assets/cards/clean-back.png';
+const DEALING_CARD_BACK = 'assets/cards/back.png';
 
 // Timing (ms)
 const DECK_SLIDE_MS = 550;
