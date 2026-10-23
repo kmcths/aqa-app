@@ -50,8 +50,7 @@ To change a reading, edit its text here. To swap art, replace the image with a W
 
 ## Current state
 
-- Text is written for cards 1 to 36: the Major Arcana and Wands.
-- Cups, Swords and Pentacles (cards 37 to 78) show a placeholder: "I'm sorry. I can't come to the reading right now. Please try a new card."
+- Text is written for all 78 cards, upright and reversed, from Adrienne's `Ask_The_Cards.txt` (October 2026). That file replaced earlier drafts of the Major Arcana and Wands text too.
 
 ## Open items
 
