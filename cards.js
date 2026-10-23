@@ -104,7 +104,7 @@ const CARDS = [
     name: "Death",
     image: "assets/cards/death.webp",
     textUpright: "The true definition of death is something that is trying to stay the same losing the battle with the Universal principle of change. Death is one word for this. Another word is Transformation. Without this principle, creativity has nowhere to go.",
-    textReversed: "Change is happening, and you are feeling like its victim. You don't realize you have the power to affect it. Dear one, the Universal principal of change makes creativity possible. Since you can't stay here forever, where would you like to go?"
+    textReversed: "Change is happening, and you are feeling like its victim. You don't realize you have the power to affect it. Dear one, the Universal principle of change makes creativity possible. Since you can't stay here forever, where would you like to go?"
   },
   {
     id: 15,
@@ -348,14 +348,14 @@ const CARDS = [
     id: 49,
     name: "Queen of Cups",
     image: "assets/cards/queen-of-cups.webp",
-    textUpright: "Your self-compassion and emotional equilibrium make you a safe haven for others who are in distress, and it bring you pleasure to soothe them.",
+    textUpright: "Your self-compassion and emotional equilibrium make you a safe haven for others who are in distress, and it brings you pleasure to soothe them.",
     textReversed: "The empathy and kindness you are offering to others is being rejected. It may be that you are trying to soothe yourself by calming them. Put on your own oxygen mask first. When you are genuinely centered, they will come to you for solace."
   },
   {
     id: 50,
     name: "King of Cups",
     image: "assets/cards/king-of-cups.webp",
-    textUpright: "You are the creating the world that feels good to your heart, allowing your emotions to guide your creative process.",
+    textUpright: "You are creating the world that feels good to your heart, allowing your emotions to guide your creative process.",
     textReversed: "Your emotions are providing you with important information about the flaws in your current situation. You may feel that your unhappiness is a punishment, but what if you allowed it to tell you what aspects of your life are not working, and used that information to create something better?"
   },
   {
@@ -474,7 +474,7 @@ const CARDS = [
     id: 67,
     name: "Three of Pentacles",
     image: "assets/cards/three-of-pentacles.webp",
-    textUpright: "Teamwork makes the dream work. A group of people who have complimentary gifts and abilities are coming together to accomplish this goal.",
+    textUpright: "Teamwork makes the dream work. A group of people who have complementary gifts and abilities are coming together to accomplish this goal.",
     textReversed: "You may believe you don't have all the skills to accomplish this task on your own, but involving other people will hinder the process more than help."
   },
   {
